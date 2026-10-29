@@ -1,9 +1,11 @@
 name: Windows release
 
-# Push a tag like v0.7.3 to build the Windows app and publish it as a release.
+# Every push to main builds the Windows app and publishes it as the release
+# for the version in package.json (bump the version for a new release).
 on:
   push:
-    tags: ['v*']
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -21,10 +23,17 @@ jobs:
       - name: Zip
         shell: pwsh
         run: |
+          $v = (Get-Content package.json | ConvertFrom-Json).version
+          "VERSION=$v" >> $env:GITHUB_ENV
           Rename-Item "dist/Live Studio-win32-x64" "Live Studio"
           Copy-Item README.md "dist/Live Studio/README.md"
           Compress-Archive -Path "dist/Live Studio" -DestinationPath LiveStudio-Windows.zip
       - uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ env.VERSION }}
+          name: Live Studio ${{ env.VERSION }}
+          target_commitish: ${{ github.sha }}
           files: LiveStudio-Windows.zip
           body_path: RELEASE_NOTES.md
+          overwrite_files: true
+          make_latest: true
