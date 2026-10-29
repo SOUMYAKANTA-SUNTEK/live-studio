@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap">
+  <link rel="stylesheet" href="/overlay.css">
+  <link rel="stylesheet" href="/broadcast.css">
+  <link rel="stylesheet" href="/control.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">Live Studio</div>
+
+    <div class="quick">
+      <div class="q-team">
+        <span class="q-name" data-text="match.home.name"></span>
+        <button data-act="home-" title="Shift+H">−</button>
+        <span class="q-score" data-text="match.homeScore"></span>
+        <button data-act="home+" class="primary" title="H">+</button>
+      </div>
+      <div class="q-team">
+        <button data-act="away-" title="Shift+J">−</button>
+        <span class="q-score" data-text="match.awayScore"></span>
+        <button data-act="away+" class="primary" title="J">+</button>
+        <span class="q-name" data-text="match.away.name"></span>
+      </div>
+      <div class="q-clock">
+        <span class="clock big" id="topClock">00:00</span>
+        <button data-act="clock-toggle" id="clockToggle" class="primary" title="Space">Start</button>
+        <button data-act="clock-set" title="Set the clock to a time">Set</button>
+        <button data-act="match-reset" title="Start a new match: score, clock, goals, cards, substitutions">Reset</button>
+      </div>
+    </div>
+
+    <div class="status" id="status">Connecting…</div>
+    <div class="live-box app-only">
+      <span class="live-info" id="liveInfo"></span>
+      <button class="golive" id="goLiveTop" data-stream="toggle">Go Live</button>
+    </div>
+  </header>
+
+  <div class="main">
+    <aside class="sidebar">
+      <nav class="tabs">
+        <button data-tab="stream" class="app-only">Stream</button>
+        <button data-tab="match" class="active">Match</button>
+        <button data-tab="lineup">Lineup</button>
+        <button data-tab="design">Design</button>
+        <button data-tab="layout">Layout</button>
+      </nav>
+
+      <!-- STREAM (desktop app only) -->
+      <section class="panel" data-panel="stream">
+        <h3>Camera</h3>
+        <label>Webcam <select id="camSelect"></select></label>
+        <div class="cam-status" id="camStatus"></div>
+        <div class="grid2">
+          <label>Fit
+            <select data-bind="elements.camera.fit">
+              <option value="cover">Fill the area (crop)</option>
+              <option value="contain">Show whole picture</option>
+            </select>
+          </label>
+          <label>Zoom <input type="range" min="1" max="3" step="0.05" data-bind="elements.camera.zoom"></label>
+        </div>
+        <label class="check"><input type="checkbox" data-bind="elements.camera.mirror"> Mirror the webcam</label>
+        <p class="hint">Move or resize the webcam in the preview, like any other element.</p>
+
+        <h3>Microphone</h3>
+        <label>Microphone <select id="micSelect"></select></label>
+        <div class="meter"><div id="micMeter"></div></div>
+        <div class="grid2">
+          <label>Volume <input type="range" min="0" max="2" step="0.05" id="micGain"></label>
+          <label class="check" style="margin-top:28px"><input type="checkbox" id="micMute"> Mute</label>
+        </div>
+        <label class="check"><input type="checkbox" id="noiseSup"> Reduce background noise</label>
+
+        <h3>YouTube</h3>
+        <label>Stream key
+          <span class="file-row"><input type="password" id="streamKey" placeholder="xxxx-xxxx-xxxx-xxxx-xxxx" autocomplete="off"><button class="link" id="showKey">Show</button></span>
+        </label>
+        <p class="hint">Find it in <a href="https://www.youtube.com/live_dashboard" target="_blank">YouTube Studio → Go live → Stream</a>. Keep it private: anyone with it can stream to your channel.</p>
+        <label>Server <input id="serverUrl"></label>
+        <div class="grid2">
+          <label>Quality
+            <select id="quality">
+              <option value="1080-30">1080p, 30 fps</option>
+              <option value="1080-60">1080p, 60 fps</option>
+              <option value="720-30">720p, 30 fps</option>
+              <option value="720-60">720p, 60 fps</option>
+            </select>
+          </label>
+          <label>Bitrate (kbps) <input type="number" id="bitrate" min="1000" max="20000" step="500"></label>
+        </div>
+        <label>Encoder <select id="encoder"><option value="">Checking your PC…</option></select></label>
+        <button class="golive wide" data-stream="toggle" id="goLiveSide">Go Live</button>
+        <div class="stream-log" id="streamLog"></div>
+      </section>
+
+      <!-- MATCH -->
+      <section class="panel active" data-panel="match">
+        <h3>Home team</h3>
+        <label>Name <input data-bind="match.home.name"></label>
+        <div class="grid2">
+          <label>Short name <input data-bind="match.home.short" maxlength="4"></label>
+          <label>Colour <input type="color" data-bind="match.home.color"></label>
+        </div>
+        <label>Logo <span class="file-row"><input type="file" accept="image/*" data-image="match.home.logo" data-max="512"><button class="link" data-clear="match.home.logo">Remove</button></span></label>
+
+        <h3>Away team</h3>
+        <label>Name <input data-bind="match.away.name"></label>
+        <div class="grid2">
+          <label>Short name <input data-bind="match.away.short" maxlength="4"></label>
+          <label>Colour <input type="color" data-bind="match.away.color"></label>
+        </div>
+        <label>Logo <span class="file-row"><input type="file" accept="image/*" data-image="match.away.logo" data-max="512"><button class="link" data-clear="match.away.logo">Remove</button></span></label>
+        <button class="wide" data-act="swap">Swap home and away</button>
+
+        <h3>Score and clock</h3>
+        <div class="grid2">
+          <label>Home score <input type="number" min="0" data-bind="match.homeScore"></label>
+          <label>Away score <input type="number" min="0" data-bind="match.awayScore"></label>
+        </div>
+        <div class="grid2">
+          <label>Period label <input data-bind="match.period" placeholder="e.g. HT, FT, 2H, ET (HT and FT hide the clock)"></label>
+          <label>Added time (min) <input type="number" min="0" data-bind="match.clock.addedTime"></label>
+        </div>
+        <label>Competition / round (Broadcast scorebar) <input data-bind="match.competition" placeholder="e.g. Gameweek 8"></label>
+        <label class="check"><input type="checkbox" data-bind="match.preMatch.enabled"> Before kick-off: show a message instead of the score</label>
+        <label>Pre-match message <input data-bind="match.preMatch.text"></label>
+        <div class="btn-row">
+          <button data-act="clock-at" data-secs="0">Kick off 00:00</button>
+          <button data-act="period-break" data-period="HT" data-secs="2700">Half time</button>
+          <button data-act="clock-at" data-secs="2700">2nd half 45:00</button>
+          <button data-act="period-break" data-period="FT">Full time</button>
+          <button data-act="clock-at" data-secs="5400">Extra time 90:00</button>
+        </div>
+        <p class="hint">Hotkeys (when not typing): <b>H</b> / <b>Shift+H</b> home goal ±, <b>J</b> / <b>Shift+J</b> away goal ±, <b>Space</b> start or pause the clock.</p>
+
+        <h3>Goals and cards</h3>
+        <p class="hint">Shown under each team's name on the scorebar. Adding a goal here also updates the score, so you don't need to press + as well.</p>
+        <div id="eventEditor"></div>
+      </section>
+
+      <!-- LINEUP -->
+      <section class="panel" data-panel="lineup">
+        <h3>On screen</h3>
+        <div class="grid2">
+          <label>Show
+            <select data-bind="lineupView.mode">
+              <option value="rotate">Both teams, switching</option>
+              <option value="home">Home team only</option>
+              <option value="away">Away team only</option>
+            </select>
+          </label>
+          <label>Switch every (seconds) <input type="number" min="3" data-bind="lineupView.interval"></label>
+        </div>
+        <label>Style
+          <select data-bind="elements.lineup.style.variant">
+            <option value="list">List of names</option>
+            <option value="pitch">Shirts on a pitch (formation)</option>
+          </select>
+        </label>
+        <div class="grid2">
+          <label>Panel top line (pitch style) <input data-bind="broadcast.panel.sponsor" placeholder="e.g. Become a member today!"></label>
+          <label>Panel subtitle <input data-bind="broadcast.panel.subtitle"></label>
+        </div>
+        <label>QR code or logo in the panel <span class="file-row"><input type="file" accept="image/*" data-image="broadcast.panel.qr" data-max="512"><button class="link" data-clear="broadcast.panel.qr">Remove</button></span></label>
+
+        <div class="team-switch">
+          <button data-lineup-team="home" class="active"></button>
+          <button data-lineup-team="away"></button>
+        </div>
+        <div id="lineupEditor"></div>
+
+        <h3>Display</h3>
+        <label class="check"><input type="checkbox" data-bind="elements.lineup.style.showSubs"> Mark substitutions in the lineup</label>
+        <label class="check"><input type="checkbox" data-bind="elements.lineup.style.showEvents"> Show goal and card icons next to names</label>
+        <label class="check"><input type="checkbox" data-bind="elements.subBanner.visible"> Pop-up banner for substitutions, goals and cards</label>
+        <label class="check"><input type="checkbox" data-bind="elements.lineup.style.teamColors"> Use each team's colour for the rows</label>
+        <label class="check"><input type="checkbox" data-bind="elements.lineup.style.showNumbers"> Show numbers</label>
+      </section>
+
+      <!-- DESIGN -->
+      <section class="panel" data-panel="design">
+        <h3>Layout</h3>
+        <div class="btn-row">
+          <button class="primary" data-act="layout-broadcast">Broadcast (full-screen webcam)</button>
+          <button class="primary" data-act="layout-studio">Studio (our own look)</button>
+          <button data-act="layout-classic">Classic (lineup on the side)</button>
+        </div>
+        <p class="hint">Studio is our own design: navy panels with angled edges, a gold accent, the scorebar at the top, the lineup on the left and a full-width ticker. Broadcast puts your webcam full screen inside a frame, with a TV-style scorebar, the lineup on a pitch, a date card, a scrolling ticker, an info box and a channel badge. You can still move and resize everything in the Layout tab.</p>
+
+        <h3>Broadcast look</h3>
+        <div class="grid2">
+          <label>Style <select data-bind="broadcast.skin"><option value="studio">Studio (navy, angled)</option><option value="stand">Broadcast (glossy red)</option></select></label>
+          <label>Main colour <input type="color" data-bind="broadcast.accent"></label>
+          <label>Font <select data-bind="broadcast.font" class="font-select"></select></label>
+        </div>
+        <div class="grid2">
+          <label class="check" style="margin-top:28px"><input type="checkbox" data-bind="elements.frame.visible"> Frame around the screen</label>
+          <label>Frame thickness <input type="number" min="2" max="60" data-bind="elements.frame.style.width"></label>
+        </div>
+        <label>Channel badge logo <span class="file-row"><input type="file" accept="image/*" data-image="broadcast.badge.logo" data-max="512"><button class="link" data-clear="broadcast.badge.logo">Remove</button></span></label>
+        <div class="grid2">
+          <label>Badge big text <input data-bind="broadcast.badge.title" placeholder="e.g. 12,345"></label>
+          <label>Badge small text <input data-bind="broadcast.badge.subtitle" placeholder="e.g. Subscribed"></label>
+        </div>
+        <div class="grid2">
+          <label>Ticker label <input data-bind="broadcast.ticker.label"></label>
+          <label>Ticker speed <input type="number" min="20" max="400" step="10" data-bind="broadcast.ticker.speed"></label>
+        </div>
+        <label>Ticker messages (one per line) <textarea rows="3" data-bind="broadcast.ticker.messagesText"></textarea></label>
+        <label>Info box messages (one per line, they take turns) <textarea rows="3" data-bind="broadcast.info.messagesText"></textarea></label>
+        <label>Change info message every (seconds) <input type="number" min="3" data-bind="broadcast.info.interval"></label>
+
+        <h3>Themes</h3>
+        <div class="btn-row" id="themes"></div>
+
+        <h3>Scorebar</h3>
+        <label>Font <select data-bind="elements.scorebar.style.font" class="font-select"></select></label>
+        <label>Background (any CSS colour or gradient) <input data-bind="elements.scorebar.style.background"></label>
+        <div class="grid3">
+          <label>Text <input type="color" data-bind="elements.scorebar.style.textColor"></label>
+          <label>Score <input type="color" data-bind="elements.scorebar.style.scoreColor"></label>
+          <label>Clock <input type="color" data-bind="elements.scorebar.style.clockColor"></label>
+        </div>
+        <div class="grid3">
+          <label>Name size <input type="number" data-bind="elements.scorebar.style.nameSize"></label>
+          <label>Score size <input type="number" data-bind="elements.scorebar.style.scoreSize"></label>
+          <label>Clock size <input type="number" data-bind="elements.scorebar.style.clockSize"></label>
+        </div>
+        <div class="grid2">
+          <label>Corner radius <input type="number" min="0" data-bind="elements.scorebar.style.radius"></label>
+          <label>Opacity <input type="range" min="0.2" max="1" step="0.05" data-bind="elements.scorebar.style.opacity"></label>
+        </div>
+        <div class="grid2">
+          <label>Scorers/cards size <input type="number" data-bind="elements.scorebar.style.eventSize"></label>
+          <label>Scorers/cards colour <input type="color" data-bind="elements.scorebar.style.eventColor"></label>
+        </div>
+        <label class="check"><input type="checkbox" data-bind="elements.scorebar.style.showEvents"> Show goal scorers and cards</label>
+        <label class="check"><input type="checkbox" data-bind="elements.scorebar.style.useShortNames"> Use short names</label>
+        <label class="check"><input type="checkbox" data-bind="elements.scorebar.style.showTeamColors"> Underline names in team colours</label>
+
+        <h3>Lineup panel</h3>
+        <label>Font <select data-bind="elements.lineup.style.font" class="font-select"></select></label>
+        <label>Background (CSS colour or gradient) <input data-bind="elements.lineup.style.background"></label>
+        <label>Background image <span class="file-row"><input type="file" accept="image/*" data-image="elements.lineup.style.backgroundImage" data-max="1920" data-jpeg="1"><button class="link" data-clear="elements.lineup.style.backgroundImage">Remove</button></span></label>
+        <label>Row shape
+          <select data-bind="elements.lineup.style.rowShape">
+            <option value="brush">Brush stroke</option>
+            <option value="slant">Slanted</option>
+            <option value="pill">Pill</option>
+            <option value="flat">Flat bar</option>
+            <option value="none">No background</option>
+          </select>
+        </label>
+        <div class="grid2">
+          <label>Row colour <input type="color" data-bind="elements.lineup.style.rowColor"></label>
+          <label>Row edge colour <input type="color" data-bind="elements.lineup.style.rowColor2"></label>
+        </div>
+        <div class="grid3">
+          <label>Names <input type="color" data-bind="elements.lineup.style.textColor"></label>
+          <label>Title <input type="color" data-bind="elements.lineup.style.titleColor"></label>
+          <label>Accent <input type="color" data-bind="elements.lineup.style.titleAccent"></label>
+        </div>
+        <div class="grid2">
+          <label>Name size <input type="number" data-bind="elements.lineup.style.fontSize"></label>
+          <label>Title size <input type="number" data-bind="elements.lineup.style.titleSize"></label>
+        </div>
+        <label class="check"><input type="checkbox" data-bind="elements.lineup.style.italic"> Italic</label>
+        <label class="check"><input type="checkbox" data-bind="elements.lineup.style.uppercase"> UPPERCASE</label>
+
+        <h3>Pop-up banner (subs, goals, cards)</h3>
+        <label>Font <select data-bind="elements.subBanner.style.font" class="font-select"></select></label>
+        <label>Background (CSS colour or gradient) <input data-bind="elements.subBanner.style.background"></label>
+        <div class="grid3">
+          <label>Text <input type="color" data-bind="elements.subBanner.style.textColor"></label>
+          <label>On ▲ <input type="color" data-bind="elements.subBanner.style.inColor"></label>
+          <label>Off ▼ <input type="color" data-bind="elements.subBanner.style.outColor"></label>
+        </div>
+        <div class="grid3">
+          <label>Text size <input type="number" data-bind="elements.subBanner.style.fontSize"></label>
+          <label>Corners <input type="number" min="0" data-bind="elements.subBanner.style.radius"></label>
+          <label>Seconds on screen <input type="number" min="2" data-bind="elements.subBanner.style.duration"></label>
+        </div>
+      </section>
+
+      <!-- LAYOUT -->
+      <section class="panel" data-panel="layout">
+        <h3>Elements</h3>
+        <p class="hint">Drag elements in the preview to move them, and drag the corner handle to resize. Arrow keys nudge the selected one (Shift = 10px). Hold Alt while dragging to turn off snapping.</p>
+        <div id="elementList"></div>
+        <div class="btn-row">
+          <button data-act="add-text">+ Text box</button>
+          <button data-act="add-image">+ Image</button>
+        </div>
+        <div id="selectedEditor"></div>
+
+        <h3>Save and load</h3>
+        <div class="btn-row">
+          <button data-act="export">Save setup to file</button>
+          <button data-act="import">Load setup from file</button>
+          <button data-act="reset" class="danger">Reset everything</button>
+        </div>
+        <input type="file" id="importFile" accept="application/json,.json" hidden>
+      </section>
+    </aside>
+
+    <section class="preview-area">
+      <div class="preview-head">
+        <span>Live preview (1920 × 1080)</span>
+        <div class="view-toggle app-only">
+          <button data-view="edit" class="active" title="Move and resize elements">Edit layout</button>
+          <button data-view="final" title="Exactly what viewers will see (V)">Final view</button>
+          <button id="fullPreview" title="Show the final view full screen (F). Press Esc to exit.">Full screen</button>
+        </div>
+        <span class="hint browser-only">In OBS add a Browser Source: <code id="overlayUrl"></code></span>
+      </div>
+      <div class="preview-wrap" id="previewWrap">
+        <div class="canvas-box" id="canvasBox">
+          <div class="cam-layer" id="camLayer"><video id="camPreview" muted playsinline></video></div>
+          <div class="stage editing" id="stage"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="/migrate.js"></script>
+  <script src="/render.js"></script>
+  <script src="/broadcast.js"></script>
+  <script src="/control.js"></script>
+  <script src="/stream.js"></script>
+</body>
+</html>

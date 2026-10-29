@@ -1,0 +1,259 @@
+/* Styles for the overlay elements, shared by the overlay and the preview. */
+
+.stage {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+}
+
+.el {
+  position: absolute;
+  box-sizing: border-box;
+}
+
+/* ---------- Scorebar ---------- */
+.scorebar {
+  /* Row 1: names, logos and score on one line. Row 2: scorers and cards. */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto auto minmax(0, 1fr);
+  align-content: center;
+  align-items: center;
+  column-gap: 28px;
+  row-gap: 8px;
+  padding: 0 3%;
+}
+.scorebar .sb-name { min-width: 0; display: flex; }
+.scorebar .sb-name.home { justify-content: flex-end; text-align: right; }
+.scorebar .sb-name.away { justify-content: flex-start; text-align: left; }
+.scorebar .sb-logo { display: flex; }
+.scorebar .name {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-bottom: 4px;
+}
+.scorebar .logo { object-fit: contain; flex-shrink: 0; }
+.scorebar .badge {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.35);
+}
+.scorebar .center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 12px;
+}
+.scorebar .score {
+  font-weight: 800;
+  white-space: nowrap;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+.scorebar .clock-line {
+  font-weight: 600;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.scorebar .period { opacity: 0.85; margin-right: 6px; }
+.scorebar .added { margin-left: 4px; }
+
+/* Scorers and cards, directly under each team name */
+.scorebar .sb-events { align-self: start; min-width: 0; }
+.scorebar .sb-events.home { grid-column: 1; }
+.scorebar .sb-events.away { grid-column: 5; }
+.scorebar .events {
+  /* Up to 3 per column; more start a new column further out from the score */
+  display: grid;
+  grid-template-rows: repeat(3, auto);
+  grid-auto-flow: column;
+  gap: 4px 22px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.scorebar .sb-events.home .events { direction: rtl; justify-content: start; }
+.scorebar .sb-events.home .ev { direction: ltr; justify-self: end; }
+.scorebar .sb-events.away .events { justify-content: start; }
+.scorebar .sb-events.away .ev { justify-self: start; }
+.scorebar .ev { display: inline-flex; align-items: center; gap: 0.4em; white-space: nowrap; }
+.ev-icon { width: 0.95em; height: 0.95em; flex-shrink: 0; }
+.ev-icon.card {
+  display: inline-block;
+  width: 0.62em;
+  height: 0.88em;
+  border-radius: 0.1em;
+  transform: rotate(8deg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.ev-icon.card.yellow { background: #facc15; }
+.ev-icon.card.red { background: #ef4444; }
+
+/* ---------- Lineup ---------- */
+.lineup {
+  display: flex;
+  flex-direction: column;
+  padding: 2.5% 6% 3%;
+  overflow: hidden;
+}
+.lineup-logo {
+  height: 13%;
+  max-width: 50%;
+  object-fit: contain;
+  margin-bottom: 1%;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
+}
+.lineup-title {
+  line-height: 1;
+  margin: 1% 0 3%;
+  white-space: nowrap;
+  text-shadow: 0 4px 0 rgba(0, 0, 0, 0.45), 0 0 24px rgba(0, 0, 0, 0.5);
+}
+.lineup .rows {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2%;
+  min-height: 0;
+}
+.lineup .row {
+  flex: 1;
+  max-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+.lineup .row span {
+  white-space: nowrap;
+  line-height: 1;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.5);
+}
+.lineup .num { margin-right: 0.5em; opacity: 0.75; }
+
+.shape-brush {
+  background: linear-gradient(90deg, var(--row2), var(--row1) 30%, var(--row1) 70%, var(--row2));
+  clip-path: polygon(2% 12%, 8% 0, 30% 6%, 55% 0, 80% 5%, 97% 0, 100% 30%, 98% 55%, 100% 85%, 93% 100%,
+    70% 94%, 45% 100%, 20% 95%, 4% 100%, 0 70%, 2% 45%, 0 25%);
+}
+.shape-pill {
+  background: linear-gradient(90deg, var(--row2), var(--row1), var(--row2));
+  border-radius: 999px;
+}
+.shape-flat { background: linear-gradient(90deg, var(--row2), var(--row1), var(--row2)); }
+.shape-slant {
+  background: linear-gradient(90deg, var(--row2), var(--row1), var(--row2));
+  clip-path: polygon(4% 0, 100% 0, 96% 100%, 0 100%);
+}
+.shape-none { background: transparent; }
+
+/* ---------- Extras ---------- */
+.extra.text {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  white-space: pre-wrap;
+  overflow: hidden;
+}
+.empty-img {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px dashed rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.6);
+  font: 600 28px Inter, sans-serif;
+  box-sizing: border-box;
+}
+
+/* ---------- Webcam guide (control panel only) ---------- */
+.camera-guide {
+  border: 4px dashed rgba(255, 255, 255, 0.45);
+  background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.04) 0 24px, rgba(255, 255, 255, 0.08) 24px 48px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.camera-guide span {
+  color: rgba(255, 255, 255, 0.6);
+  font: 600 32px Inter, sans-serif;
+}
+
+/* ---------- Lineup switching and substitutions ---------- */
+.lineup-inner {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.fade-in { animation: fade-in 0.6s ease-out; }
+@keyframes fade-in {
+  from { opacity: 0; transform: translateX(-24px); }
+  to { opacity: 1; transform: none; }
+}
+.lineup .row { gap: 0.6em; }
+.lineup .sub-in {
+  color: #22c55e;
+  font-style: normal;
+  font-size: 0.6em;
+  margin-right: 0.35em;
+  vertical-align: 0.15em;
+}
+.lineup .sub-off {
+  color: #fecaca;
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  white-space: nowrap;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 0.15em 0.5em;
+  border-radius: 999px;
+}
+
+.subbanner {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 28px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  animation: slide-up 0.5s ease-out;
+}
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: none; }
+}
+.subbanner .logo { object-fit: contain; flex-shrink: 0; }
+.subbanner .badge {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+}
+.subbanner .sb-text { min-width: 0; line-height: 1.15; }
+.subbanner .sb-text > div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.subbanner .sb-head { font-size: 0.45em; text-transform: uppercase; letter-spacing: 0.12em; opacity: 0.75; margin-bottom: 4px; }
+.subbanner .sb-on { font-weight: 800; }
+.subbanner .sb-off { font-size: 0.7em; opacity: 0.85; }
+.subbanner .sb-on .ev-icon { width: 0.85em; height: 0.85em; vertical-align: -0.08em; }
+.subbanner .sb-on .ev-icon.card { width: 0.55em; height: 0.8em; }
+.subbanner.kind-goal .sb-head, .subbanner.kind-penalty .sb-head { opacity: 1; font-weight: 800; color: #4ade80; }
+.subbanner.kind-red .sb-head { opacity: 1; color: #fca5a5; }
+.subbanner.kind-yellow .sb-head { opacity: 1; color: #fde047; }
+
+/* Goal and card icons next to names in the lineup */
+.lineup .ev-marks { margin-left: -0.2em; display: inline-flex; gap: 0.15em; align-items: center; font-size: var(--mark-size, 26px); }
+.lineup .ev-marks .ev-icon { width: 1em; height: 1em; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5)); }
+.lineup .ev-marks .ev-icon.card { width: 0.66em; height: 0.92em; }
+.ev-icon.og circle { fill: #fecaca; }

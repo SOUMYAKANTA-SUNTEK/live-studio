@@ -1,0 +1,225 @@
+{
+  "match": {
+    "home": {
+      "name": "Chelsea",
+      "short": "CHE",
+      "logo": "",
+      "color": "#034694"
+    },
+    "away": {
+      "name": "Tottenham Hotspur",
+      "short": "TOT",
+      "logo": "",
+      "color": "#132257"
+    },
+    "homeScore": 0,
+    "awayScore": 0,
+    "period": "",
+    "clock": {
+      "running": false,
+      "baseSeconds": 0,
+      "startedAt": null,
+      "addedTime": 0
+    },
+    "events": [],
+    "banner": null,
+    "competition": "",
+    "preMatch": {
+      "enabled": false,
+      "text": "Countdown to kick-off!"
+    }
+  },
+  "lineups": {
+    "home": {
+      "title": "",
+      "logo": "",
+      "players": [
+        "Penders",
+        "Acheampong",
+        "Lacroix",
+        "Colwill",
+        "Neto",
+        "Caicedo",
+        "Henderson",
+        "Hato",
+        "Palmer",
+        "Quenda",
+        "Rogers"
+      ],
+      "bench": [],
+      "subs": [],
+      "formation": "4-2-3-1"
+    },
+    "away": {
+      "title": "",
+      "logo": "",
+      "players": [
+        "Player 1",
+        "Player 2",
+        "Player 3",
+        "Player 4",
+        "Player 5",
+        "Player 6",
+        "Player 7",
+        "Player 8",
+        "Player 9",
+        "Player 10",
+        "Player 11"
+      ],
+      "bench": [],
+      "subs": [],
+      "formation": "4-2-3-1"
+    }
+  },
+  "lineupView": {
+    "mode": "rotate",
+    "interval": 20
+  },
+  "elements": {
+    "camera": {
+      "x": 610,
+      "y": 0,
+      "w": 1310,
+      "h": 840,
+      "visible": true,
+      "fit": "cover",
+      "mirror": false,
+      "zoom": 1
+    },
+    "lineup": {
+      "x": 0,
+      "y": 0,
+      "w": 610,
+      "h": 1080,
+      "visible": true,
+      "style": {
+        "background": "linear-gradient(180deg, #050b2e 0%, #0a1d6b 50%, #050b2e 100%)",
+        "backgroundImage": "",
+        "rowColor": "#1f4fd1",
+        "rowColor2": "#0b2a8a",
+        "textColor": "#ffffff",
+        "titleColor": "#ffffff",
+        "titleAccent": "#4da3ff",
+        "font": "Russo One",
+        "fontSize": 40,
+        "titleSize": 84,
+        "italic": true,
+        "uppercase": true,
+        "showNumbers": false,
+        "rowShape": "brush",
+        "teamColors": false,
+        "showSubs": true,
+        "showEvents": true,
+        "variant": "list",
+        "gkColor": "#facc15"
+      }
+    },
+    "scorebar": {
+      "x": 610,
+      "y": 840,
+      "w": 1310,
+      "h": 240,
+      "visible": true,
+      "style": {
+        "background": "#1c1c1e",
+        "opacity": 1,
+        "textColor": "#ffffff",
+        "scoreColor": "#ffffff",
+        "clockColor": "#34c759",
+        "font": "Inter",
+        "nameSize": 40,
+        "scoreSize": 56,
+        "clockSize": 26,
+        "radius": 0,
+        "showTeamColors": false,
+        "useShortNames": false,
+        "showEvents": true,
+        "eventSize": 22,
+        "eventColor": "#d1d5db",
+        "variant": "classic"
+      }
+    },
+    "subBanner": {
+      "x": 660,
+      "y": 700,
+      "w": 720,
+      "h": 150,
+      "visible": true,
+      "style": {
+        "background": "linear-gradient(90deg, #0b1220, #1e293b)",
+        "textColor": "#ffffff",
+        "inColor": "#22c55e",
+        "outColor": "#ef4444",
+        "font": "Inter",
+        "fontSize": 38,
+        "radius": 14,
+        "duration": 10
+      }
+    },
+    "frame": {
+      "visible": false,
+      "style": {
+        "width": 14
+      }
+    },
+    "channelBadge": {
+      "x": 30,
+      "y": 45,
+      "w": 360,
+      "h": 120,
+      "visible": false
+    },
+    "dateCard": {
+      "x": 50,
+      "y": 848,
+      "w": 150,
+      "h": 195,
+      "visible": false
+    },
+    "ticker": {
+      "x": 215,
+      "y": 980,
+      "w": 1145,
+      "h": 62,
+      "visible": false
+    },
+    "infoBox": {
+      "x": 1378,
+      "y": 848,
+      "w": 492,
+      "h": 195,
+      "visible": false
+    }
+  },
+  "extras": [],
+  "broadcast": {
+    "skin": "stand",
+    "accent": "#e30613",
+    "font": "Barlow Condensed",
+    "ticker": {
+      "label": "Latest",
+      "messages": [
+        "Welcome to the watchalong!",
+        "Drop your score predictions in the chat"
+      ],
+      "speed": 120
+    },
+    "info": {
+      "messages": [
+        "Check out the links in our description down below!",
+        "Like and subscribe for more matchday streams!"
+      ],
+      "interval": 12
+    },
+    "badge": {
+      "logo": "",
+      "title": "Your Channel",
+      "subtitle": "Subscribe"
+    },
+    "panel": {
+      "sponsor": "",
+      "subtitle": "Starting XI",
+      "qr": ""
+    }
+  }
+}

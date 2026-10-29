@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Overlay</title>
+  <link rel="stylesheet" href="/overlay.css">
+  <link rel="stylesheet" href="/broadcast.css">
+  <style>
+    html, body { margin: 0; background: transparent; overflow: hidden; }
+  </style>
+</head>
+<body>
+  <div class="stage" id="stage"></div>
+  <script src="/render.js"></script>
+  <script src="/broadcast.js"></script>
+  <script>
+    const stage = document.getElementById('stage');
+    let current = null;
+    let offset = 0;
+
+    // Scale the 1920x1080 canvas to whatever size OBS gives the browser source
+    function fit() {
+      const scale = Math.min(window.innerWidth / CANVAS_W, window.innerHeight / CANVAS_H);
+      stage.style.transformOrigin = '0 0';
+      stage.style.transform = `scale(${scale})`;
+    }
+    window.addEventListener('resize', fit);
+    fit();
+
+    subscribe((state, serverOffset) => {
+      current = state;
+      offset = serverOffset;
+      renderOverlay(stage, state, { serverOffset: offset });
+      updateClocks(stage, state, offset);
+    });
+
+    setInterval(() => {
+      if (!current) return;
+      if (viewChanged(stage, current, offset)) renderOverlay(stage, current, { serverOffset: offset });
+      updateClocks(stage, current, offset);
+    }, 250);
+  </script>
+</body>
+</html>
