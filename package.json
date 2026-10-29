@@ -6,10 +6,12 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "server": "node server.js"
+    "server": "node server.js",
+    "pack": "node scripts/pack.mjs"
   },
   "license": "MIT",
   "devDependencies": {
+    "@electron/packager": "^18.4.4",
     "electron": "^38.8.6"
   },
   "dependencies": {

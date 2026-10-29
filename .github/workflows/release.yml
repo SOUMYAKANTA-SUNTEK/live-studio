@@ -1,0 +1,30 @@
+name: Windows release
+
+# Push a tag like v0.7.3 to build the Windows app and publish it as a release.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: node scripts/pack.mjs
+      - name: Zip
+        shell: pwsh
+        run: |
+          Rename-Item "dist/Live Studio-win32-x64" "Live Studio"
+          Copy-Item README.md "dist/Live Studio/README.md"
+          Compress-Archive -Path "dist/Live Studio" -DestinationPath LiveStudio-Windows.zip
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: LiveStudio-Windows.zip
+          body_path: RELEASE_NOTES.md
